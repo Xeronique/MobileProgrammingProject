@@ -13,13 +13,13 @@ public final class DiaryDB {
         public static final String DAY = "day";
         public static final String TITLE = "title";
         public static final String CONTENTS = "contents";
-        public static final String TABLENAME = "diarytable";
+        public static final String TABLENAME = "diaryTable";
         public static final String SQL_CREATE_ENTRIES = "create table if not exists " + TABLENAME
-                + "(" + ID + "text primary key, "
-                + YEAR + " integer not null , "
-                + MONTH + " integer not null , "
-                + DAY + " integer not null , "
-                + TITLE + " text not null , "
-                + CONTENTS + " text not null );";
+                + "(" + ID + " TEXT PRIMARY KEY, "
+                + YEAR + " INTEGER NOT NULL , "
+                + MONTH + " INTEGER NOT NULL, "
+                + DAY + " INTEGER NOT NULL, "
+                + TITLE + " TEXT , "
+                + CONTENTS + " TEXT );";
     }
 }
