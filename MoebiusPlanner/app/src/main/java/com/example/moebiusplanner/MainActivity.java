@@ -42,10 +42,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        diaryDbHelper = new DiaryDbHelper(this);
-        diaryDbHelper.open();
-        diaryDbHelper.create();
-
         this.intializeView();
 
         mCalendar.setOnDateChangedListener(new OnDateSelectedListener() {
@@ -70,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
+    protected void onResume() {
         HashMap<String, String> diary = diaryDbHelper.getDiary(mCalendar.getSelectedDate().getYear(), mCalendar.getSelectedDate().getMonth(), mCalendar.getSelectedDate().getDay());
         if (diary == null) {
             mAddDiary.setVisibility(View.VISIBLE);
@@ -81,10 +77,15 @@ public class MainActivity extends AppCompatActivity {
             mViewTitle.setText(diary.get(DiaryDB.CreateDB.TITLE));
             mViewContents.setText(diary.get(DiaryDB.CreateDB.CONTENTS));
         }
-        super.onStart();
+        super.onResume();
     }
 
     public void intializeView() {
+
+        diaryDbHelper = new DiaryDbHelper(this);
+        diaryDbHelper.open();
+        diaryDbHelper.create();
+
         mCalendar = (MaterialCalendarView) findViewById(R.id.calendarView);
         mTextDate = (TextView) findViewById(R.id.textDate);
         mAddDiary = (TextView) findViewById(R.id.textView_addDiary);
@@ -155,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         diaryDbHelper.deleteDiary(mCalendar.getSelectedDate().getYear(), mCalendar.getSelectedDate().getMonth(), mCalendar.getSelectedDate().getDay());
+                        onResume();
                     }
                 });
                 builder.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
@@ -162,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 });
+                builder.create().show();
                 break;
         }
         return super.onContextItemSelected(item);

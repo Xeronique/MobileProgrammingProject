@@ -28,25 +28,26 @@ public class ReadDiary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_diary);
 
-        diaryDbHelper = new DiaryDbHelper(this);
-        diaryDbHelper.open();
-        diaryDbHelper.create();
-
         this.initializeView();
     }
 
     @Override
-    protected void onStart() {
+    protected void onResume() {
         HashMap<String, String> diary = diaryDbHelper.getDiary(yearNum, monthNum, dayNum);
         if (diary != null) {
             textTitle.setText(diary.get(DiaryDB.CreateDB.TITLE));
             textContents.setText(diary.get(DiaryDB.CreateDB.CONTENTS));
         }
 
-        super.onStart();
+        super.onResume();
     }
 
     public void initializeView() {
+
+        diaryDbHelper = new DiaryDbHelper(this);
+        diaryDbHelper.open();
+        diaryDbHelper.create();
+
         textDay = (TextView) findViewById(R.id.textDay);
         textTitle = (TextView) findViewById(R.id.textTitle);
         textContents = (TextView) findViewById(R.id.textContents);
@@ -93,6 +94,7 @@ public class ReadDiary extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 });
+                builder.create().show();
                 break;
 
             case R.id.button_read_Cancel:

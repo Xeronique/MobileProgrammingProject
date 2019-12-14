@@ -26,14 +26,15 @@ public class WriteDiary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_diary);
 
-        diaryDbHelper = new DiaryDbHelper(this);
-        diaryDbHelper.open();
-        diaryDbHelper.create();
-
         this.initializeView();
     }
 
     public void initializeView() {
+
+        diaryDbHelper = new DiaryDbHelper(this);
+        diaryDbHelper.open();
+        diaryDbHelper.create();
+
         textDay = (TextView) findViewById(R.id.textDay);
         editTitle = (EditText) findViewById(R.id.editTitle);
         editContents = (EditText) findViewById(R.id.editContents);
