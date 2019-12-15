@@ -15,7 +15,7 @@ public final class DiaryDB {
         public static final String CONTENTS = "contents";
         public static final String TABLENAME = "diaryTable";
         public static final String SQL_CREATE_ENTRIES = "create table if not exists " + TABLENAME
-                + "(" + ID + " TEXT PRIMARY KEY, "
+                + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + YEAR + " INTEGER NOT NULL , "
                 + MONTH + " INTEGER NOT NULL, "
                 + DAY + " INTEGER NOT NULL, "

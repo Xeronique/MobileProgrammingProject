@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             mViewTitle.setText(diary.get(DiaryDB.CreateDB.TITLE));
             mViewContents.setText(diary.get(DiaryDB.CreateDB.CONTENTS));
         }
+        mCalendar.invalidateDecorators();
         super.onResume();
     }
 
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         registerForContextMenu(mLayoutViewDiary);
 
         mCalendar.setSelectedDate(CalendarDay.today());
-        mCalendar.addDecorators(new GeneralDecorator(), new SaturdayDecorator(), new SundayDecorator(), selectDecorator);
+        mCalendar.addDecorators(new GeneralDecorator(), new SaturdayDecorator(), new SundayDecorator(), selectDecorator, new DiaryDecorator(this));
         mTextDate.setText(mCalendar.getSelectedDate().getYear() + " / " + mCalendar.getSelectedDate().getMonth() + " / " + mCalendar.getSelectedDate().getDay());
 
         HashMap<String, String> diary = diaryDbHelper.getDiary(mCalendar.getSelectedDate().getYear(), mCalendar.getSelectedDate().getMonth(), mCalendar.getSelectedDate().getDay());

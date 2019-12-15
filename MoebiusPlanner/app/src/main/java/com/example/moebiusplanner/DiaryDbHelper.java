@@ -56,22 +56,54 @@ public class DiaryDbHelper {
 
     public long insertDiary(int year, int month, int day, String title, String contents) {
         ContentValues values = new ContentValues();
-        values.put(DiaryDB.CreateDB.ID, "" + year + month + day);
         values.put(DiaryDB.CreateDB.YEAR, year);
         values.put(DiaryDB.CreateDB.MONTH, month);
         values.put(DiaryDB.CreateDB.DAY, day);
         values.put(DiaryDB.CreateDB.TITLE, title);
         values.put(DiaryDB.CreateDB.CONTENTS, contents);
 
+        String selection = DiaryDB.CreateDB.YEAR + " = ? AND " + DiaryDB.CreateDB.MONTH + " = ? AND " + DiaryDB.CreateDB.DAY + " = ?";
+        String[] selectionArgs = {
+                "" + year,
+                "" + month,
+                "" + day
+        };
+
         if (getDiary(year, month, day) == null)
             return mDB.insert(DiaryDB.CreateDB.TABLENAME, null, values);
         else
-            return mDB.update(DiaryDB.CreateDB.TABLENAME, values, DiaryDB.CreateDB.ID + " = ?", new String[]{"" + year + month + day});
+            return mDB.update(DiaryDB.CreateDB.TABLENAME, values, selection, selectionArgs);
     }
 
     public long deleteDiary(int year, int month, int day) {
-        String[] args = {"" + year + month + day};
-        return mDB.delete(DiaryDB.CreateDB.TABLENAME, DiaryDB.CreateDB.ID + " = ?", args);
+        String selection = DiaryDB.CreateDB.YEAR + " = ? AND " + DiaryDB.CreateDB.MONTH + " = ? AND " + DiaryDB.CreateDB.DAY + " = ?";
+        String[] selectionArgs = {
+                "" + year,
+                "" + month,
+                "" + day
+        };
+        return mDB.delete(DiaryDB.CreateDB.TABLENAME, selection, selectionArgs);
+    }
+
+    public ArrayList getAllDiary() {
+        ArrayList diaryList = new ArrayList<>();
+        String[] projection = {
+                DiaryDB.CreateDB.YEAR,
+                DiaryDB.CreateDB.MONTH,
+                DiaryDB.CreateDB.DAY
+        };
+
+        Cursor mCursor = mDB.query(DiaryDB.CreateDB.TABLENAME, projection, null, null, null, null, null);
+        while (mCursor.moveToNext()) {
+            HashMap<String, String> result = new HashMap<String, String>();
+            result.put(DiaryDB.CreateDB.YEAR, mCursor.getString(mCursor.getColumnIndex(DiaryDB.CreateDB.YEAR)));
+            result.put(DiaryDB.CreateDB.MONTH, mCursor.getString(mCursor.getColumnIndex(DiaryDB.CreateDB.MONTH)));
+            result.put(DiaryDB.CreateDB.DAY, mCursor.getString(mCursor.getColumnIndex(DiaryDB.CreateDB.DAY)));
+            diaryList.add(result);
+        }
+        mCursor.close();
+
+        return diaryList;
     }
 
     public ArrayList getListofYear() {
@@ -121,7 +153,7 @@ public class DiaryDbHelper {
                 Integer.toString(year),
                 Integer.toString(month)
         };
-        String order = DiaryDB.CreateDB.YEAR + " ASC";
+        String order = DiaryDB.CreateDB.DAY + " ASC";
         Cursor mCursor = mDB.query(DiaryDB.CreateDB.TABLENAME, projection, selection, selectionArgs,
                 null, null, order);
 
@@ -134,9 +166,11 @@ public class DiaryDbHelper {
     }
 
     public HashMap<String, String> getDiary(int year, int month, int day) {
-        String selection = DiaryDB.CreateDB.ID + " = ?";
+        String selection = DiaryDB.CreateDB.YEAR + " = ? AND " + DiaryDB.CreateDB.MONTH + " = ? AND " + DiaryDB.CreateDB.DAY + " = ?";
         String[] selectionArgs = {
-                "" + year + month + day
+                "" + year,
+                "" + month,
+                "" + day
         };
         Cursor mCursor = mDB.query(DiaryDB.CreateDB.TABLENAME, null, selection, selectionArgs,
                 null, null, null);
